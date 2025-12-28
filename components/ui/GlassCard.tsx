@@ -1,12 +1,17 @@
-
 import React from 'react';
-import { motion, MotionProps } from 'framer-motion';
+import { motion, HTMLMotionProps } from 'framer-motion';
 
-interface GlassCardProps extends React.HTMLAttributes<HTMLDivElement>, MotionProps {
-  children: React.ReactNode;
+interface GlassCardProps extends HTMLMotionProps<'div'> {
+  gradientClass?: string;
 }
 
-export const GlassCard: React.FC<GlassCardProps> = ({ children, className, ...props }) => {
+// FIX: Changed component from React.FC to a plain function component.
+// This resolves a TypeScript error where framer-motion's extended `children` prop type
+// (which can include MotionValues) conflicts with the more restrictive `React.ReactNode`
+// type enforced by `React.FC`.
+export const GlassCard = ({ children, className, gradientClass, ...props }: GlassCardProps) => {
+  const defaultGradient = "from-indigo-500/20";
+  
   return (
     <motion.div
       whileHover={{ scale: 1.02 }}
@@ -14,12 +19,15 @@ export const GlassCard: React.FC<GlassCardProps> = ({ children, className, ...pr
       className={`relative bg-slate-800/60 backdrop-blur-xl border border-white/10 rounded-2xl ${className}`}
       {...props}
     >
-      {/* Lapisan Gradien Statis */}
-      <div className="absolute inset-0 rounded-2xl -z-10 bg-gradient-to-br from-indigo-500/20 via-transparent to-transparent opacity-50 pointer-events-none" />
+      {/* Lapisan Gradien yang dapat disesuaikan */}
+      <div className={`absolute inset-0 rounded-2xl -z-10 bg-gradient-to-br via-transparent to-transparent opacity-50 pointer-events-none ${gradientClass || defaultGradient}`} />
       
-      <div className="relative">
+      {/* FIX: The wrapper for children must also be a motion component.
+          A standard `div` cannot render `MotionValue` children, which are part of
+          framer-motion's extended prop types and cause a type error. */}
+      <motion.div className="relative">
         {children}
-      </div>
+      </motion.div>
     </motion.div>
   );
 };

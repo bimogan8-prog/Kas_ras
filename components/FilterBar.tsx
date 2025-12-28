@@ -25,7 +25,7 @@ export const FilterBar: React.FC<FilterBarProps> = ({
 }) => {
   return (
     <div className="sticky top-0 z-30 py-4 bg-slate-900/80 backdrop-blur-xl">
-      <div className="flex items-center space-x-2 overflow-x-auto pb-2">
+      <div className="flex items-center space-x-2 overflow-x-auto">
         {filters.map((filter) => (
           <motion.button
             key={filter}

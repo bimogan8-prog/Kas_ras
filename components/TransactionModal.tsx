@@ -18,6 +18,21 @@ interface TransactionModalProps {
   transaction: Transaction | null;
 }
 
+// Helper untuk format angka dengan titik
+const formatAmountInput = (value: string | number): string => {
+  const stringValue = String(value).replace(/[^\d]/g, '');
+  if (stringValue === '') return '';
+  const num = BigInt(stringValue);
+  return new Intl.NumberFormat('id-ID').format(num);
+};
+
+const unformatAmountInput = (formattedValue: string): number => {
+  if (formattedValue === '') return 0;
+  const cleanedValue = formattedValue.replace(/[^\d]/g, '');
+  return Number(cleanedValue);
+};
+
+
 export const TransactionModal: React.FC<TransactionModalProps> = ({ isOpen, onClose, onSave, transaction }) => {
   const [type, setType] = useState<'debit' | 'credit'>('credit');
   const [amount, setAmount] = useState('');
@@ -32,7 +47,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({ isOpen, onCl
   useEffect(() => {
     if (transaction) {
       setType(transaction.type);
-      setAmount(String(transaction.amount));
+      setAmount(formatAmountInput(transaction.amount));
       setDescription(transaction.description);
       setCategory(transaction.category);
       setDate(new Date(transaction.date));
@@ -49,6 +64,10 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({ isOpen, onCl
     setImageFile(null);
     setIsUploading(false);
   }, [transaction, isOpen]);
+  
+  const handleAmountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAmount(formatAmountInput(e.target.value));
+  };
 
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -76,7 +95,7 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({ isOpen, onCl
       description,
       category,
       type,
-      amount: parseFloat(amount),
+      amount: unformatAmountInput(amount),
       buktiUrl: finalBuktiUrl,
     };
     onSave(transactionData, transaction?.id);
@@ -92,15 +111,15 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({ isOpen, onCl
   }, [type, transaction]);
 
   return (
-    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4">
+    <div className="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto">
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 20 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
         transition={{ duration: 0.2 }}
-        className="w-full max-w-md"
+        className="w-full max-w-md my-auto"
       >
-        <GlassCard className="p-4 md:p-6 relative">
+        <GlassCard className="p-4 md:p-6 relative flex flex-col max-h-[90vh]">
           <motion.button
             whileTap={{ scale: 0.9 }}
             onClick={onClose}
@@ -109,48 +128,50 @@ export const TransactionModal: React.FC<TransactionModalProps> = ({ isOpen, onCl
           >
             <XIcon className="w-5 h-5" />
           </motion.button>
-          <h2 className="text-xl font-bold mb-6">{transaction ? 'Edit Transaksi' : 'Tambah Transaksi'}</h2>
+          <h2 className="text-xl font-bold mb-4 flex-shrink-0">{transaction ? 'Edit Transaksi' : 'Tambah Transaksi'}</h2>
           
-          <form onSubmit={handleSave} className="space-y-4">
-            <div className="grid grid-cols-2 gap-3">
-              <button type="button" onClick={() => setType('credit')} className={`py-3 rounded-lg text-sm font-semibold transition-all ${type === 'credit' ? 'bg-red-500/20 text-red-300 ring-1 ring-red-500/50' : 'bg-slate-800/60 text-gray-400 hover:bg-slate-700/60'}`}>Kredit (Beban)</button>
-              <button type="button" onClick={() => setType('debit')} className={`py-3 rounded-lg text-sm font-semibold transition-all ${type === 'debit' ? 'bg-green-500/20 text-green-300 ring-1 ring-green-500/50' : 'bg-slate-800/60 text-gray-400 hover:bg-slate-700/60'}`}>Debit (Pemasukan)</button>
+          <form onSubmit={handleSave} className="flex-1 flex flex-col min-h-0">
+            <div className="flex-1 overflow-y-auto space-y-4 pr-3 -mr-3">
+                <div className="grid grid-cols-2 gap-3">
+                <button type="button" onClick={() => setType('credit')} className={`py-3 rounded-lg text-sm font-semibold transition-all ${type === 'credit' ? 'bg-red-500/20 text-red-300 ring-1 ring-red-500/50' : 'bg-slate-800/60 text-gray-400 hover:bg-slate-700/60'}`}>Kredit (Beban)</button>
+                <button type="button" onClick={() => setType('debit')} className={`py-3 rounded-lg text-sm font-semibold transition-all ${type === 'debit' ? 'bg-green-500/20 text-green-300 ring-1 ring-green-500/50' : 'bg-slate-800/60 text-gray-400 hover:bg-slate-700/60'}`}>Debit (Pemasukan)</button>
+                </div>
+
+                <div>
+                <label htmlFor="amount" className="text-xs text-gray-400 mb-1 block">Jumlah (IDR)</label>
+                <input id="amount" type="text" inputMode="numeric" value={amount} onChange={handleAmountChange} placeholder="0" className="w-full bg-slate-800/60 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                </div>
+
+                <div>
+                <label htmlFor="description" className="text-xs text-gray-400 mb-1 block">Deskripsi</label>
+                <input id="description" type="text" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Contoh: Bayar Sewa Kantor" className="w-full bg-slate-800/60 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" />
+                </div>
+
+                <CustomSelect label="Kategori" options={categories} selectedValue={category} onSelect={setCategory} />
+
+                <div>
+                    <label className="text-xs text-gray-400 mb-1 block">Tanggal</label>
+                    <button type="button" onClick={() => setIsDatePickerOpen(true)} className="w-full flex items-center justify-between bg-slate-800/60 border border-white/10 rounded-lg px-4 py-3 text-white text-left focus:outline-none focus:ring-1 focus:ring-indigo-500">
+                        <span>{formatDate(date.toISOString())}</span>
+                        <CalendarIcon className="w-4 h-4 text-gray-400" />
+                    </button>
+                </div>
+
+                <ImageUploader 
+                onFileChange={setImageFile} 
+                existingImageUrl={buktiUrl}
+                onClearImage={() => {
+                    setBuktiUrl(undefined);
+                    setImageFile(null);
+                }}
+                />
             </div>
-
-            <div>
-              <label htmlFor="amount" className="text-xs text-gray-400 mb-1 block">Jumlah (IDR)</label>
-              <input id="amount" type="number" value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="0" className="w-full bg-slate-800/60 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" />
-            </div>
-
-            <div>
-              <label htmlFor="description" className="text-xs text-gray-400 mb-1 block">Deskripsi</label>
-              <input id="description" type="text" value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Contoh: Bayar Sewa Kantor" className="w-full bg-slate-800/60 border border-white/10 rounded-lg px-4 py-3 text-white placeholder-gray-500 focus:outline-none focus:ring-1 focus:ring-indigo-500" />
-            </div>
-
-            <CustomSelect label="Kategori" options={categories} selectedValue={category} onSelect={setCategory} />
-
-            <div>
-                <label className="text-xs text-gray-400 mb-1 block">Tanggal</label>
-                <button type="button" onClick={() => setIsDatePickerOpen(true)} className="w-full flex items-center justify-between bg-slate-800/60 border border-white/10 rounded-lg px-4 py-3 text-white text-left focus:outline-none focus:ring-1 focus:ring-indigo-500">
-                    <span>{formatDate(date.toISOString())}</span>
-                    <CalendarIcon className="w-4 h-4 text-gray-400" />
-                </button>
-            </div>
-
-            <ImageUploader 
-              onFileChange={setImageFile} 
-              existingImageUrl={buktiUrl}
-              onClearImage={() => {
-                setBuktiUrl(undefined);
-                setImageFile(null);
-              }}
-            />
             
             <motion.button
               whileTap={{ scale: 0.98 }}
               type="submit"
               disabled={isUploading}
-              className="w-full bg-indigo-600 text-white font-semibold py-3 rounded-lg mt-2 hover:bg-indigo-500 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:bg-indigo-800 disabled:cursor-not-allowed flex items-center justify-center"
+              className="w-full bg-indigo-600 text-white font-semibold py-3 rounded-lg mt-4 flex-shrink-0 hover:bg-indigo-500 transition-colors focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-slate-900 disabled:bg-indigo-800 disabled:cursor-not-allowed flex items-center justify-center"
             >
               {isUploading ? (
                 <>

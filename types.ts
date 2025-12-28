@@ -14,5 +14,7 @@ export type TransactionData = Omit<Transaction, 'id' | 'balance'>;
 
 export type FilterType = 'Semua' | 'Debit' | 'Kredit';
 
+export type ViewType = 'dashboard' | 'grafik';
+
 export const incomeCategories = ['Setoran', 'Jasa', 'Lain-lain'];
 export const expenseCategories = ['Operasional', 'Gaji', 'Perlengkapan', 'Sewa', 'Lain-lain'];

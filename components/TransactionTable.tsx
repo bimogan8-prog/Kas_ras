@@ -61,7 +61,7 @@ const TableRow: React.FC<{ transaction: Transaction, onEdit: (transaction: Trans
                             initial={{ opacity: 0, y: -10 }}
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -10 }}
-                            className="absolute top-full right-0 mt-1 w-28 bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-lg shadow-xl z-10"
+                            className="absolute top-full right-0 mt-1 w-28 bg-slate-900/80 backdrop-blur-xl border border-white/10 rounded-lg shadow-xl z-20"
                             onMouseLeave={() => setMenuOpen(false)}
                             onClick={(e) => e.stopPropagation()}
                         >
@@ -82,7 +82,7 @@ const TableRow: React.FC<{ transaction: Transaction, onEdit: (transaction: Trans
 
 export const TransactionTable: React.FC<TransactionTableProps> = ({ transactions, onEdit, onDelete, onPreviewImage }) => {
   return (
-    <GlassCard className="overflow-hidden">
+    <GlassCard>
         <div className="overflow-x-auto">
             <table className="w-full min-w-[600px] text-sm text-left">
                 <thead className="border-b border-white/10 text-xs text-gray-400 uppercase tracking-wider">

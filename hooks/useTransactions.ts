@@ -44,16 +44,22 @@ export const useTransactions = () => {
 
   const addTransaction = useCallback(async (transactionData: TransactionData) => {
     const newTransactionRef = push(transactionsRef);
-    await set(newTransactionRef, {
-      ...transactionData,
-    });
+    const dataToSave = { ...transactionData };
+    // Firebase tidak mengizinkan nilai `undefined`. Hapus properti jika tidak ada URL.
+    if (dataToSave.buktiUrl === undefined) {
+      delete dataToSave.buktiUrl;
+    }
+    await set(newTransactionRef, dataToSave);
   }, []);
 
   const updateTransaction = useCallback(async (id: string, updates: TransactionData) => {
     const transactionToUpdateRef = ref(db, `transactions/${id}`);
-    await set(transactionToUpdateRef, {
-      ...updates
-    });
+    const dataToSave = { ...updates };
+    // Firebase tidak mengizinkan nilai `undefined`. Hapus properti jika tidak ada URL.
+    if (dataToSave.buktiUrl === undefined) {
+      delete dataToSave.buktiUrl;
+    }
+    await set(transactionToUpdateRef, dataToSave);
   }, []);
 
   const deleteTransaction = useCallback(async (id: string) => {

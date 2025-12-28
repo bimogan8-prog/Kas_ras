@@ -26,8 +26,8 @@ export const formatTime = (dateString: string): string => {
   });
 };
 
-export const getMonthName = (monthIndex: number): string => {
+export const getMonthName = (monthIndex: number, format: 'long' | 'short' = 'long'): string => {
     const date = new Date();
     date.setMonth(monthIndex);
-    return date.toLocaleString('id-ID', { month: 'long' });
+    return date.toLocaleString('id-ID', { month: format });
 }

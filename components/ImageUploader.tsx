@@ -73,7 +73,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ onFileChange, exis
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.9 }}
-            className="relative w-full aspect-[4/3] rounded-lg overflow-hidden border-2 border-dashed border-white/10"
+            className="relative w-full aspect-[16/9] rounded-lg overflow-hidden border-2 border-dashed border-white/10"
           >
             <img src={preview} alt="Preview" className="w-full h-full object-cover" />
             <div className="absolute inset-0 bg-black/50 opacity-0 hover:opacity-100 transition-opacity flex items-center justify-center">
@@ -95,7 +95,7 @@ export const ImageUploader: React.FC<ImageUploaderProps> = ({ onFileChange, exis
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             htmlFor="file-upload"
-            className={`w-full aspect-[4/3] rounded-lg border-2 border-dashed flex flex-col items-center justify-center text-center cursor-pointer transition-colors
+            className={`w-full aspect-[16/9] rounded-lg border-2 border-dashed flex flex-col items-center justify-center text-center cursor-pointer transition-colors
               ${isDragging ? 'border-indigo-500 bg-indigo-500/10' : 'border-white/10 hover:border-white/20 hover:bg-white/5'}`
             }
             onDragEnter={onDragEnter} onDragLeave={onDragLeave} onDragOver={onDragOver} onDrop={onDrop}

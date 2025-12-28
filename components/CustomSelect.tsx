@@ -79,14 +79,14 @@ export const CustomSelect: React.FC<CustomSelectProps> = ({ label, options, sele
             >
               <div className="flex justify-between items-center mb-4">
                 <h3 className="font-bold text-lg">{label}</h3>
-                <motion.button whileTap={{scale:0.9}} onClick={() => setIsOpen(false)} className="p-2 rounded-full -mr-2">
+                <motion.button type="button" whileTap={{scale:0.9}} onClick={() => setIsOpen(false)} className="p-2 rounded-full -mr-2">
                   <XIcon className="w-5 h-5 text-gray-400" />
                 </motion.button>
               </div>
               <ul className="max-h-[50vh] overflow-y-auto space-y-2">
                 {options.map((option) => (
                   <li key={option}>
-                    <button onClick={() => handleSelect(option)} className="w-full text-left px-4 py-3 rounded-lg bg-slate-800/60 hover:bg-slate-700/60">
+                    <button type="button" onClick={() => handleSelect(option)} className="w-full text-left px-4 py-3 rounded-lg bg-slate-800/60 hover:bg-slate-700/60">
                       {option}
                     </button>
                   </li>

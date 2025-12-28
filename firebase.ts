@@ -12,9 +12,8 @@ import { getDatabase } from 'firebase/database';
 const firebaseConfig = {
   apiKey: "PASTIKAN_INI_API_KEY_ANDA",
   authDomain: "your-project-id.firebaseapp.com",
-  // Ganti URL ini dengan URL Realtime Database Anda.
-  // Formatnya harus: https://<project-id>-default-rtdb.firebaseio.com
-  databaseURL: "https://your-project-id-default-rtdb.firebaseio.com",
+  // URL telah diperbarui sesuai permintaan Anda.
+  databaseURL: "https://kasras-be2f9-default-rtdb.asia-southeast1.firebasedatabase.app/",
   projectId: "your-project-id",
   storageBucket: "your-project-id.appspot.com",
   messagingSenderId: "YOUR_MESSAGING_SENDER_ID",

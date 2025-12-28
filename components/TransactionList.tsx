@@ -38,7 +38,7 @@ export const TransactionList: React.FC<TransactionListProps> = ({ transactions, 
       variants={listVariants}
       initial="hidden"
       animate="visible"
-      className="space-y-3 pb-24 lg:pb-0"
+      className="space-y-3"
     >
       <AnimatePresence>
         {transactions.map((transaction) => (
