@@ -1,0 +1,28 @@
+
+import { initializeApp } from 'firebase/app';
+import { getDatabase } from 'firebase/database';
+
+// --- PANDUAN PENTING ---
+// Ganti objek firebaseConfig di bawah ini dengan konfigurasi
+// dari proyek Firebase Anda sendiri. Anda bisa mendapatkannya dari
+// Firebase Console: Project Settings > General > Your apps > SDK setup and configuration.
+//
+// KESALAHAN FATAL akan terjadi jika placeholder ini tidak diganti.
+// Pastikan `databaseURL` memiliki format yang benar seperti contoh di bawah.
+const firebaseConfig = {
+  apiKey: "PASTIKAN_INI_API_KEY_ANDA",
+  authDomain: "your-project-id.firebaseapp.com",
+  // Ganti URL ini dengan URL Realtime Database Anda.
+  // Formatnya harus: https://<project-id>-default-rtdb.firebaseio.com
+  databaseURL: "https://your-project-id-default-rtdb.firebaseio.com",
+  projectId: "your-project-id",
+  storageBucket: "your-project-id.appspot.com",
+  messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+  appId: "YOUR_APP_ID"
+};
+
+// Inisialisasi Firebase
+const app = initializeApp(firebaseConfig);
+
+// Ekspor instance database untuk digunakan di hook
+export const db = getDatabase(app);
