@@ -8,14 +8,13 @@ import { getDatabase } from 'firebase/database';
 // Firebase Console: Project Settings > General > Your apps > SDK setup and configuration.
 //
 // KESALAHAN FATAL akan terjadi jika placeholder ini tidak diganti.
-// Pastikan `databaseURL` memiliki format yang benar seperti contoh di bawah.
 const firebaseConfig = {
   apiKey: "PASTIKAN_INI_API_KEY_ANDA",
-  authDomain: "your-project-id.firebaseapp.com",
+  authDomain: "kasras-be2f9.firebaseapp.com",
   // URL telah diperbarui sesuai permintaan Anda.
   databaseURL: "https://kasras-be2f9-default-rtdb.asia-southeast1.firebasedatabase.app/",
-  projectId: "your-project-id",
-  storageBucket: "your-project-id.appspot.com",
+  projectId: "kasras-be2f9",
+  storageBucket: "kasras-be2f9.appspot.com",
   messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
   appId: "YOUR_APP_ID"
 };

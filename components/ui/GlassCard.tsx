@@ -1,9 +1,13 @@
 import React from 'react';
 import { motion, HTMLMotionProps } from 'framer-motion';
 
-interface GlassCardProps extends HTMLMotionProps<'div'> {
+// FIX: Changed from interface to type alias. This can resolve issues with complex
+// generic types from libraries not being extended correctly. By using a type
+// intersection, we ensure that all properties from HTMLMotionProps<'div'>,
+// including 'children' and 'className', are correctly included in GlassCardProps.
+type GlassCardProps = HTMLMotionProps<'div'> & {
   gradientClass?: string;
-}
+};
 
 // FIX: Changed component from React.FC to a plain function component.
 // This resolves a TypeScript error where framer-motion's extended `children` prop type
